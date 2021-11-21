@@ -15,10 +15,15 @@ new Autocomplete(document.getElementById('state'), {
   },
 });
 
-
+const githubUrl = {
+  url: 'https://api.github.com/search/users',
+  queryParameterKey: 'q',
+  perPageParameterKey: 'per_page'
+}
 // Github Users
-// new Autocomplete(document.getElementById('gh-user'), {
-//   onSelect: (ghUserId) => {
-//     console.log('selected github user id:', ghUserId);
-//   },
-// });
+new Autocomplete(document.getElementById('gh-user'), {
+  url: githubUrl,
+  onSelect: (ghUserId) => {
+    console.log('selected github user id:', ghUserId);
+  },
+});

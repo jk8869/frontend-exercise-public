@@ -1,6 +1,6 @@
 export default class Autocomplete {
   constructor(rootEl, options = {}) {
-    options = Object.assign({ numOfResults: 10, data: [] }, options);
+    options = Object.assign({ numOfResults: 10, data: [], url: null }, options);
     Object.assign(this, { rootEl, options });
 
     this.init();
@@ -8,10 +8,13 @@ export default class Autocomplete {
 
   onQueryChange(query) {
     // Get data for the dropdown
-    let results = this.getResults(query, this.options.data);
-    results = results.slice(0, this.options.numOfResults);
-
-    this.updateDropdown(results);
+    if(this.options.data.length == 0 && this.options.url != null){
+      this.fetchData(query, this.options.url);
+    }else{
+      let results = this.getResults(query, this.options.data);
+      results = results.slice(0, this.options.numOfResults);
+      this.updateDropdown(results);
+    }    
   }
 
   /**
@@ -26,6 +29,19 @@ export default class Autocomplete {
     });
 
     return results;
+  }
+
+  async fetchData(query, url){
+    await fetch(`${url.url}?${url.queryParameterKey}=${query}&${url.perPageParameterKey}=${this.options.numOfResults}`)
+    .then(response => response.json())
+    .then(data => { 
+      console.log(data.items);
+      const itmes = data.items.map(item => ({
+        text: item.login,
+        value: item.id
+      }));
+      this.updateDropdown(itmes);      
+    });
   }
 
   updateDropdown(results) {

@@ -1,6 +1,7 @@
 import Autocomplete from './Autocomplete';
 import usStates from './us-states';
 import './main.css';
+import Api from './Api';
 
 
 // US States
@@ -15,14 +16,9 @@ new Autocomplete(document.getElementById('state'), {
   },
 });
 
-const githubUrl = {
-  url: 'https://api.github.com/search/users',
-  queryParameterKey: 'q',
-  perPageParameterKey: 'per_page'
-}
-// Github Users
+// Github Api
 new Autocomplete(document.getElementById('gh-user'), {
-  url: githubUrl,
+  api: Api.github,
   onSelect: (ghUserId) => {
     console.log('selected github user id:', ghUserId);
   },

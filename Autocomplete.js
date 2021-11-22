@@ -32,7 +32,11 @@ export default class Autocomplete {
   }
 
   async fetchData(query, api){
-    await fetch(`${api.url}?${api.queryParameterKey}=${query}&${api.perPageParameterKey}=${this.options.numOfResults}`)
+    let url = `${api.url}?${api.queryParameterKey}=${query}`;
+    if(api.perPageParameterKey){
+      url += `&${api.perPageParameterKey}=${this.options.numOfResults}`;
+    }
+    await fetch(url)
     .then(response => response.json())
     .then(data => {       
       const items = this.extractJson(data);
@@ -41,17 +45,26 @@ export default class Autocomplete {
   }
 
   extractJson(data){
+    let items = [];
+    if(!data) return [];
     switch(this.options.api.key){
       case 'github':
-        const items = data.items.map(item => ({
+        items = data.items.map(item => ({
           text: item.login,
+          value: item.id
+        }));
+        return items;
+      
+      case 'gorest':
+        items = data.data.map(item => ({
+          text: item.name,
           value: item.id
         }));
         return items;
       
         //todo based on each api we should implement the way of extraction
       case 'api_public':
-        return [];
+        return items;
     }
   }
 

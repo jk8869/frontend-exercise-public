@@ -23,3 +23,11 @@ new Autocomplete(document.getElementById('gh-user'), {
     console.log('selected github user id:', ghUserId);
   },
 });
+
+// Gorest Api
+new Autocomplete(document.getElementById('gorest-user'), {
+  api: Api.gorest,
+  onSelect: (gorestUserId) => {
+    console.log('selected gorest user id:', gorestUserId);
+  },
+});
